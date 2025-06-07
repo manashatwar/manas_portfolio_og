@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   name: string;
-  category: 'web3' | 'blockchain' | 'dapp';
+  category: 'web3' | 'blockchain' | 'dapp' | 'defi' | 'smart-contracts' | 'nft' | 'research';
   description: string;
   longDescription: string;
   techStack: string[];
@@ -92,5 +92,29 @@ export const projectCategories = {
     icon: 'Smartphone',
     color: '#4F46E5',
     count: projects.filter(p => p.category === 'dapp').length
+  },
+  'defi': {
+    name: 'DeFi Projects',
+    icon: 'TrendingUp',
+    color: '#10B981',
+    count: projects.filter(p => p.category === 'defi').length
+  },
+  'smart-contracts': {
+    name: 'Smart Contracts',
+    icon: 'FileText',
+    color: '#F59E0B',
+    count: projects.filter(p => p.category === 'smart-contracts').length
+  },
+  'nft': {
+    name: 'NFT Projects',
+    icon: 'Image',
+    color: '#EF4444',
+    count: projects.filter(p => p.category === 'nft').length
+  },
+  'research': {
+    name: 'Research',
+    icon: 'BookOpen',
+    color: '#8B5CF6',
+    count: projects.filter(p => p.category === 'research').length
   }
 };
