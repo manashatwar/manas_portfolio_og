@@ -22,7 +22,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
   const blockPositions = useMemo(() => [
     { category: 'defi', position: [-4, 2, 0] as [number, number, number] },
     { category: 'smart-contracts', position: [0, 0, 2] as [number, number, number] },
-    { category: 'dapps', position: [4, 2, 0] as [number, number, number] },
+    { category: 'dapp', position: [4, 2, 0] as [number, number, number] },
     { category: 'nft', position: [-2, -2, -1] as [number, number, number] },
     { category: 'research', position: [2, -2, -1] as [number, number, number] }
   ], []);
