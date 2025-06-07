@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Mail } from 'lucide-react';
+import { ChevronDown, Mail, Github, Linkedin, Twitter } from 'lucide-react';
 import BlockchainVisualization from '../3D/BlockchainVisualization';
 import { personalInfo } from '../../data/personalInfo';
 
@@ -23,6 +23,10 @@ const HeroSection: React.FC = () => {
     });
   };
 
+  const handleContactClick = () => {
+    window.location.href = `mailto:${personalInfo.email}`;
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Grid */}
@@ -43,25 +47,17 @@ const HeroSection: React.FC = () => {
         ))}
       </div>
 
-      {/* 3D Blockchain Visualization */}
-      <div className="absolute inset-0">
-        <BlockchainVisualization 
-          onBlockClick={handleBlockClick}
-          activeBlock={activeBlock}
-        />
-      </div>
-
-      {/* Hero Content Overlay */}
-      <div className="relative z-20 text-center px-4 sm:px-6 lg:px-8">
+      <div className="grid lg:grid-cols-2 gap-8 items-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        {/* Left Side - Hero Content */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="max-w-4xl mx-auto"
+          className="space-y-8"
         >
           {/* Main Title */}
           <motion.h1 
-            className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.7 }}
@@ -73,7 +69,7 @@ const HeroSection: React.FC = () => {
 
           {/* Subtitle */}
           <motion.h2 
-            className="text-xl sm:text-2xl lg:text-3xl text-gray-300 mb-4 font-light"
+            className="text-xl sm:text-2xl lg:text-3xl text-gray-300 font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
@@ -83,7 +79,7 @@ const HeroSection: React.FC = () => {
 
           {/* Tagline */}
           <motion.p 
-            className="text-lg sm:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg text-gray-400 leading-relaxed max-w-lg"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
@@ -93,7 +89,7 @@ const HeroSection: React.FC = () => {
 
           {/* Action Buttons */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
+            className="flex flex-col sm:flex-row items-start gap-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.3 }}
@@ -107,49 +103,80 @@ const HeroSection: React.FC = () => {
               View My Work
             </motion.a>
             
-            <motion.a
-              href="#contact"
+            <motion.button
+              onClick={handleContactClick}
               className="btn-secondary"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <Mail className="inline-block mr-2" size={20} />
               Get In Touch
-            </motion.a>
+            </motion.button>
           </motion.div>
 
-          {/* Quick Stats */}
+          {/* Social Links */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 glass-card p-6 max-w-3xl mx-auto mb-12"
-            initial={{ opacity: 0, y: 50 }}
+            className="flex items-center space-x-6 pt-4"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.5 }}
           >
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary-400">
-                {personalInfo.stats.projectsCompleted}+
-              </div>
-              <div className="text-gray-400 text-sm">Projects</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary-400">
-                {personalInfo.stats.totalTVL}
-              </div>
-              <div className="text-gray-400 text-sm">TVL Managed</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary-400">
-                {personalInfo.stats.smartContractsDeployed}+
-              </div>
-              <div className="text-gray-400 text-sm">Smart Contracts</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary-400">
-                {personalInfo.stats.yearsExperience}+
-              </div>
-              <div className="text-gray-400 text-sm">Years Experience</div>
-            </div>
+            <motion.a
+              href={personalInfo.social.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-primary-400 transition-colors"
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Github size={24} />
+            </motion.a>
+            <motion.a
+              href={personalInfo.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-primary-400 transition-colors"
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Linkedin size={24} />
+            </motion.a>
+            <motion.a
+              href={personalInfo.social.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-primary-400 transition-colors"
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Twitter size={24} />
+            </motion.a>
           </motion.div>
+
+          {/* Interaction Hint */}
+          <motion.div 
+            className="glass-card px-4 py-3 max-w-sm"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.7 }}
+          >
+            <p className="text-gray-300 text-sm">
+              👈 Explore the interactive blockchain visualization
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Right Side - 3D Blockchain Visualization */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="h-[600px] lg:h-[700px]"
+        >
+          <BlockchainVisualization 
+            onBlockClick={handleBlockClick}
+            activeBlock={activeBlock}
+          />
         </motion.div>
       </div>
 

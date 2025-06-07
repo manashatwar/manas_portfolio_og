@@ -18,15 +18,14 @@ const Header: React.FC = () => {
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Blog', href: '#blog' },
+    { name: 'Articles', href: '#articles' },
     { name: 'Contact', href: '#contact' }
   ];
 
   const socialLinks = [
-    { Icon: Github, href: 'https://github.com/alexchen-blockchain', label: 'GitHub' },
-    { Icon: Linkedin, href: 'https://linkedin.com/in/alexchen-blockchain', label: 'LinkedIn' },
-    { Icon: Twitter, href: 'https://twitter.com/alexchen_dev', label: 'Twitter' }
+    { Icon: Github, href: 'https://github.com/manashatwar', label: 'GitHub' },
+    { Icon: Linkedin, href: 'https://www.linkedin.com/in/manas-hatwar-5bb10925a/', label: 'LinkedIn' },
+    { Icon: Twitter, href: 'https://x.com/manas_hatwar', label: 'Twitter' }
   ];
 
   return (
@@ -50,11 +49,11 @@ const Header: React.FC = () => {
           >
             <div className="relative">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                <span className="text-dark-950 font-bold text-lg">AC</span>
+                <span className="text-dark-950 font-bold text-lg">MH</span>
               </div>
               <div className="absolute -inset-1 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg blur opacity-30 animate-pulse"></div>
             </div>
-            <span className="ml-3 text-xl font-bold text-gradient">Alex Chen</span>
+            <span className="ml-3 text-xl font-bold text-gradient">Manas Hatwar</span>
           </motion.div>
 
           {/* Desktop Navigation */}

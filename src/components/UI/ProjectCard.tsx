@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, FileText, Shield, TrendingUp, Users } from 'lucide-react';
+import { Github, ExternalLink } from 'lucide-react';
 import { Project } from '../../data/projects';
 
 interface ProjectCardProps {
@@ -12,30 +12,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Live': return 'text-green-400 bg-green-400/20';
-      case 'Audited': return 'text-blue-400 bg-blue-400/20';
+      case 'Completed': return 'text-blue-400 bg-blue-400/20';
       case 'Development': return 'text-yellow-400 bg-yellow-400/20';
-      case 'Beta': return 'text-purple-400 bg-purple-400/20';
       default: return 'text-gray-400 bg-gray-400/20';
-    }
-  };
-
-  const getMetricIcon = (key: string) => {
-    switch (key) {
-      case 'tvlManaged': return TrendingUp;
-      case 'users': return Users;
-      case 'security': return Shield;
-      default: return FileText;
-    }
-  };
-
-  const formatMetricLabel = (key: string) => {
-    switch (key) {
-      case 'tvlManaged': return 'TVL Managed';
-      case 'gasOptimization': return 'Gas Saved';
-      case 'transactions': return 'Transactions';
-      case 'users': return 'Users';
-      case 'security': return 'Security';
-      default: return key;
     }
   };
 
@@ -57,15 +36,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/20 to-transparent" />
         
-        {/* Featured Badge */}
-        {project.featured && (
-          <div className="absolute top-3 left-3">
-            <span className="bg-gradient-to-r from-primary-500 to-secondary-500 text-dark-950 px-3 py-1 rounded-full text-xs font-semibold">
-              Featured
-            </span>
-          </div>
-        )}
-
         {/* Status Badge */}
         <div className="absolute top-3 right-3">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(project.status)}`}>
@@ -87,48 +57,24 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         </div>
 
         {/* Tech Stack */}
-        <div className="mb-4">
+        <div className="mb-6">
+          <h4 className="text-sm font-semibold text-gray-400 mb-2">Technologies Used:</h4>
           <div className="flex flex-wrap gap-2">
-            {project.techStack.slice(0, 4).map((tech, techIndex) => (
+            {project.techStack.map((tech, techIndex) => (
               <span
                 key={techIndex}
-                className="bg-dark-800 text-primary-400 px-2 py-1 rounded text-xs font-medium"
+                className="bg-dark-800 text-primary-400 px-3 py-1 rounded-full text-xs font-medium"
               >
                 {tech}
               </span>
             ))}
-            {project.techStack.length > 4 && (
-              <span className="text-gray-400 text-xs px-2 py-1">
-                +{project.techStack.length - 4} more
-              </span>
-            )}
           </div>
         </div>
-
-        {/* Metrics */}
-        {Object.keys(project.metrics).length > 0 && (
-          <div className="mb-6">
-            <div className="grid grid-cols-2 gap-3">
-              {Object.entries(project.metrics).slice(0, 4).map(([key, value]) => {
-                const Icon = getMetricIcon(key);
-                return (
-                  <div key={key} className="flex items-center space-x-2">
-                    <Icon className="w-4 h-4 text-primary-400" />
-                    <div>
-                      <div className="text-xs text-gray-400">{formatMetricLabel(key)}</div>
-                      <div className="text-sm font-semibold text-white">{value}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
 
         {/* Tags */}
         <div className="mb-6">
           <div className="flex flex-wrap gap-2">
-            {project.tags.slice(0, 3).map((tag, tagIndex) => (
+            {project.tags.map((tag, tagIndex) => (
               <span
                 key={tagIndex}
                 className="bg-primary-500/20 text-primary-400 px-2 py-1 rounded-full text-xs"
@@ -165,18 +111,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
                   whileTap={{ scale: 0.9 }}
                 >
                   <ExternalLink size={20} />
-                </motion.a>
-              )}
-              {project.links.article && (
-                <motion.a
-                  href={project.links.article}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-primary-400 transition-colors"
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <FileText size={20} />
                 </motion.a>
               )}
             </div>

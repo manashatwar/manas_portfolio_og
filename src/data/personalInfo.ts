@@ -1,67 +1,66 @@
 export const personalInfo = {
-  name: 'Alex Chen',
-  title: 'Senior Blockchain Developer',
-  tagline: 'Building the decentralized future, one smart contract at a time',
-  location: 'San Francisco, CA',
-  email: 'alex.chen@blockchain.dev',
-  bio: `Passionate blockchain developer with 5+ years of experience building secure, scalable DeFi protocols and smart contracts. Specialized in Ethereum ecosystem development with expertise in Solidity, advanced testing frameworks, and gas optimization techniques.
+  name: 'Manas Hatwar',
+  title: 'Blockchain Developer',
+  tagline: 'Building decentralized solutions and exploring Web3 innovations',
+  location: 'India',
+  email: 'manashatwar1@gmail.com',
+  bio: `Passionate blockchain developer focused on building innovative Web3 solutions. I specialize in creating decentralized applications, smart contracts, and exploring the latest trends in blockchain technology.
 
-I have successfully launched multiple DeFi protocols managing over $50M in total value locked, with a focus on security-first development and innovative financial primitives. My work includes yield farming strategies, cross-chain bridges, and governance systems.
+My work spans across various blockchain platforms with a focus on practical applications like decentralized attendance systems, IPFS-based portfolio hosting, and Discord integrations for Web3 communities.
 
-Currently exploring cutting-edge areas like MEV protection, account abstraction, and zero-knowledge proofs to push the boundaries of what's possible in decentralized finance.`,
+I also write extensively about blockchain technology, security vulnerabilities, and the evolving Web3 ecosystem through my Medium articles.`,
   
   stats: {
-    projectsCompleted: 25,
-    totalTVL: '$50M+',
-    smartContractsDeployed: 150,
-    securityAudits: 12,
-    yearsExperience: 5,
-    communityStar: '2.5K+'
+    projectsCompleted: 3,
+    articlesWritten: '10+',
+    githubRepos: '15+',
+    mediumFollowers: '500+'
   },
 
   social: {
-    github: 'https://github.com/alexchen-blockchain',
-    linkedin: 'https://linkedin.com/in/alexchen-blockchain',
-    twitter: 'https://twitter.com/alexchen_dev',
-    medium: 'https://medium.com/@alexchen-blockchain',
-    discord: 'alexchen#1234',
-    telegram: '@alexchen_dev'
+    github: 'https://github.com/manashatwar',
+    linkedin: 'https://www.linkedin.com/in/manas-hatwar-5bb10925a/',
+    twitter: 'https://x.com/manas_hatwar',
+    medium: 'https://medium.com/@manashatwar1',
+    email: 'manashatwar1@gmail.com'
   },
 
-  certifications: [
+  mediumArticles: [
     {
-      name: 'Certified Ethereum Developer',
-      issuer: 'Ethereum Foundation',
-      date: '2023',
-      credential: 'ETH-DEV-2023-001'
+      title: 'The $1.4B Bybit Hack: Inside the Largest Crypto Heist in History',
+      url: 'https://medium.com/thecapital/the-1-4b-bybit-hack-inside-the-largest-crypto-heist-in-history-6aead666b4d5',
+      publication: 'The Capital',
+      readTime: '8 min read',
+      tags: ['Security', 'Cryptocurrency', 'Hacking'],
+      excerpt: 'A deep dive into one of the most devastating cryptocurrency security breaches and its implications for the industry.',
+      publishedDate: '2024-01-15'
     },
     {
-      name: 'Smart Contract Security Auditor',
-      issuer: 'ConsenSys',
-      date: '2022',
-      credential: 'CSS-AUD-2022-042'
+      title: 'The Dark Side of Liquidity: A Deep Dive into AMM-based DEX Risks',
+      url: 'https://medium.com/thecapital/the-dark-side-of-liquidity-a-deep-dive-into-amm-based-dex-risks-and-security-based-on-the-sok-a35a550f1bb6',
+      publication: 'The Capital',
+      readTime: '12 min read',
+      tags: ['DeFi', 'AMM', 'Security'],
+      excerpt: 'Exploring the security vulnerabilities and risks associated with Automated Market Makers in decentralized exchanges.',
+      publishedDate: '2024-02-20'
     },
     {
-      name: 'DeFi Protocol Architecture',
-      issuer: 'DeFi Alliance',
-      date: '2023',
-      credential: 'DPA-2023-018'
+      title: 'Blockchain Bridges: Connecting the Dots in the Blockchain Ecosystem',
+      url: 'https://medium.com/thecapital/blockchain-bridges-connecting-the-dots-in-the-blockchain-ecosystem-f8f15806240c',
+      publication: 'The Capital',
+      readTime: '10 min read',
+      tags: ['Blockchain', 'Interoperability', 'Bridges'],
+      excerpt: 'Understanding how blockchain bridges work and their crucial role in connecting different blockchain networks.',
+      publishedDate: '2024-03-10'
+    },
+    {
+      title: 'Web3 Has a Metadata Problem and It Needs to Be Fixed',
+      url: 'https://medium.com/@manashatwar1/web3-has-a-metadata-problem-and-it-needs-to-be-fixed-7772653cb1cf',
+      publication: 'Personal Blog',
+      readTime: '6 min read',
+      tags: ['Web3', 'Metadata', 'NFTs'],
+      excerpt: 'Analyzing the critical metadata issues plaguing Web3 applications and potential solutions.',
+      publishedDate: '2024-04-05'
     }
-  ],
-
-  achievements: [
-    'Led development of $25M TVL yield farming protocol',
-    'Discovered and responsibly disclosed 5+ smart contract vulnerabilities',
-    'Speaker at ETHGlobal hackathons and DeFi conferences',
-    'Open source contributor with 500+ GitHub stars',
-    'Mentored 20+ junior blockchain developers'
-  ],
-
-  currentFocus: [
-    'Account Abstraction (ERC-4337)',
-    'Zero-Knowledge Proofs',
-    'MEV Protection Mechanisms',
-    'Cross-Chain Interoperability',
-    'Decentralized Identity Solutions'
   ]
 };
