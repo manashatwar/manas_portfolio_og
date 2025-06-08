@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Clock, Calendar, BookOpen, TrendingUp } from 'lucide-react';
+import { ExternalLink, Clock, Calendar, BookOpen, TrendingUp, Eye, Heart } from 'lucide-react';
 import { personalInfo } from '../../data/personalInfo';
 
 const MediumArticles: React.FC = () => {
@@ -15,7 +15,7 @@ const MediumArticles: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.3
       }
     }
   };
@@ -30,51 +30,141 @@ const MediumArticles: React.FC = () => {
   };
 
   return (
-    <section id="articles" ref={ref} className="section-padding bg-dark-950">
-      <div className="container-width">
+    <section id="articles" ref={ref} className="section-padding bg-dark-950 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="container-width relative z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-gradient">
-              Featured Articles
+          <motion.div variants={itemVariants} className="text-center mb-20">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl mb-6">
+              <BookOpen className="w-8 h-8 text-dark-950" />
+            </div>
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6 text-gradient">
+              Research & Insights
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Exploring blockchain technology, security vulnerabilities, and the evolving Web3 ecosystem 
-              through in-depth analysis and research.
+              Deep dives into blockchain security, DeFi protocols, and the evolving Web3 landscape
             </p>
           </motion.div>
 
-          {/* Articles Grid */}
-          <div className="space-y-8">
-            {personalInfo.mediumArticles.map((article, index) => (
-              <motion.article
-                key={index}
-                variants={itemVariants}
-                className="group"
-              >
-                <motion.div
-                  className="glass-card-hover p-8 relative overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {/* Background Pattern */}
-                  <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
-                    <BookOpen size={128} className="text-primary-400" />
+          {/* Featured Article - Large Card */}
+          <motion.div variants={itemVariants} className="mb-16">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-dark-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-12">
+                <div className="grid lg:grid-cols-3 gap-8 items-center">
+                  {/* Article Content */}
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="flex items-center space-x-4">
+                      <span className="bg-gradient-to-r from-primary-500 to-secondary-500 text-dark-950 px-4 py-2 rounded-full text-sm font-bold">
+                        FEATURED
+                      </span>
+                      <span className="text-primary-400 font-semibold">
+                        {personalInfo.mediumArticles[0].publication}
+                      </span>
+                    </div>
+                    
+                    <h3 className="text-2xl lg:text-4xl font-bold text-white leading-tight group-hover:text-primary-400 transition-colors">
+                      {personalInfo.mediumArticles[0].title}
+                    </h3>
+                    
+                    <p className="text-gray-300 text-lg leading-relaxed">
+                      {personalInfo.mediumArticles[0].excerpt}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-3">
+                      {personalInfo.mediumArticles[0].tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-medium border border-primary-500/30"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-4">
+                      <div className="flex items-center space-x-6 text-gray-400">
+                        <div className="flex items-center space-x-2">
+                          <Calendar size={16} />
+                          <span className="text-sm">{new Date(personalInfo.mediumArticles[0].publishedDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Clock size={16} />
+                          <span className="text-sm">{personalInfo.mediumArticles[0].readTime}</span>
+                        </div>
+                      </div>
+                      
+                      <motion.a
+                        href={personalInfo.mediumArticles[0].url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center space-x-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-dark-950 px-6 py-3 rounded-full font-semibold hover:scale-105 transition-transform"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span>Read Article</span>
+                        <ExternalLink size={18} />
+                      </motion.a>
+                    </div>
                   </div>
+                  
+                  {/* Visual Element */}
+                  <div className="lg:col-span-1">
+                    <div className="relative">
+                      <div className="w-full h-64 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-2xl flex items-center justify-center">
+                        <div className="text-center">
+                          <Eye className="w-16 h-16 text-primary-400 mx-auto mb-4" />
+                          <div className="text-3xl font-bold text-primary-400">1.4B</div>
+                          <div className="text-gray-400">Impact Scale</div>
+                        </div>
+                      </div>
+                      <div className="absolute -top-4 -right-4 w-8 h-8 bg-red-500 rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
-                  <div className="grid lg:grid-cols-4 gap-6 items-start relative z-10">
-                    {/* Article Number & Publication */}
-                    <div className="lg:col-span-1">
-                      <div className="flex flex-col items-start space-y-3">
-                        <div className="text-6xl font-bold text-primary-400/20 group-hover:text-primary-400/40 transition-colors">
-                          {String(index + 1).padStart(2, '0')}
+          {/* Other Articles - Timeline Style */}
+          <motion.div variants={itemVariants} className="space-y-8">
+            <h3 className="text-2xl font-bold text-center text-gray-300 mb-12">More Research Articles</h3>
+            
+            <div className="relative">
+              {/* Timeline Line */}
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 to-secondary-500 hidden lg:block"></div>
+              
+              {personalInfo.mediumArticles.slice(1).map((article, index) => (
+                <motion.div
+                  key={index}
+                  className="relative lg:pl-20 mb-12 group"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  {/* Timeline Dot */}
+                  <div className="absolute left-6 w-4 h-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full hidden lg:block group-hover:scale-150 transition-transform"></div>
+                  
+                  <div className="glass-card-hover p-6 lg:p-8">
+                    <div className="grid lg:grid-cols-4 gap-6">
+                      {/* Article Number & Meta */}
+                      <div className="lg:col-span-1">
+                        <div className="text-6xl font-bold text-primary-400/20 group-hover:text-primary-400/40 transition-colors mb-4">
+                          {String(index + 2).padStart(2, '0')}
                         </div>
                         <div className="space-y-2">
-                          <div className="bg-gradient-to-r from-primary-500 to-secondary-500 text-dark-950 px-3 py-1 rounded-full text-xs font-semibold">
+                          <div className="text-primary-400 font-semibold text-sm">
                             {article.publication}
                           </div>
                           <div className="flex items-center space-x-2 text-gray-400 text-sm">
@@ -87,81 +177,76 @@ const MediumArticles: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-
-                    {/* Article Content */}
-                    <div className="lg:col-span-3">
-                      <div className="space-y-4">
-                        {/* Title */}
-                        <h3 className="text-2xl lg:text-3xl font-bold text-white group-hover:text-primary-400 transition-colors leading-tight">
+                      
+                      {/* Article Content */}
+                      <div className="lg:col-span-3">
+                        <h4 className="text-xl lg:text-2xl font-bold text-white mb-3 group-hover:text-primary-400 transition-colors">
                           {article.title}
-                        </h3>
-
-                        {/* Excerpt */}
-                        <p className="text-gray-300 leading-relaxed text-lg">
+                        </h4>
+                        
+                        <p className="text-gray-300 mb-4 leading-relaxed">
                           {article.excerpt}
                         </p>
-
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2">
+                        
+                        <div className="flex flex-wrap gap-2 mb-4">
                           {article.tags.map((tag, tagIndex) => (
                             <span
                               key={tagIndex}
-                              className="bg-dark-800 text-primary-400 px-3 py-1 rounded-full text-sm font-medium"
+                              className="bg-dark-800 text-primary-400 px-3 py-1 rounded-full text-xs font-medium"
                             >
                               {tag}
                             </span>
                           ))}
                         </div>
-
-                        {/* Read More Link */}
-                        <div className="pt-4">
-                          <motion.a
-                            href={article.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center space-x-2 text-primary-400 hover:text-primary-300 font-semibold group-hover:translate-x-2 transition-all duration-300"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <span>Read Full Article</span>
-                            <ExternalLink size={18} />
-                          </motion.a>
-                        </div>
+                        
+                        <motion.a
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center space-x-2 text-primary-400 hover:text-primary-300 font-semibold group-hover:translate-x-2 transition-all duration-300"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <span>Read Full Article</span>
+                          <ExternalLink size={16} />
+                        </motion.a>
                       </div>
                     </div>
                   </div>
-
-                  {/* Hover Effect Border */}
-                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary-500/30 rounded-2xl transition-colors duration-300" />
                 </motion.div>
-              </motion.article>
-            ))}
-          </div>
+              ))}
+            </div>
+          </motion.div>
 
-          {/* View All Articles CTA */}
+          {/* Call to Action */}
           <motion.div 
             variants={itemVariants}
-            className="text-center mt-16"
+            className="text-center mt-20"
           >
-            <div className="glass-card p-8 max-w-md mx-auto">
-              <TrendingUp className="w-12 h-12 text-primary-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Want to read more?
-              </h3>
-              <p className="text-gray-400 mb-6">
-                Check out my Medium profile for more articles on blockchain technology and Web3.
-              </p>
-              <motion.a
-                href={personalInfo.social.medium}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Visit Medium Profile
-              </motion.a>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000"></div>
+              <div className="relative glass-card p-8 max-w-md mx-auto">
+                <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl mx-auto mb-6">
+                  <TrendingUp className="w-8 h-8 text-dark-950" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  Stay Updated
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Follow my Medium profile for the latest insights on blockchain security and Web3 innovations.
+                </p>
+                <motion.a
+                  href={personalInfo.social.medium}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary inline-flex items-center space-x-2"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Heart size={18} />
+                  <span>Follow on Medium</span>
+                </motion.a>
+              </div>
             </div>
           </motion.div>
         </motion.div>
