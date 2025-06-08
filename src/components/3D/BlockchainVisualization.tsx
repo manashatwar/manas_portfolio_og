@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useCallback, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Text } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import Block3D from './Block3D';
@@ -18,43 +18,48 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Block positions in 3D space
+  // Block positions in 3D space - more spread out for better visibility
   const blockPositions = useMemo(() => [
-    { category: 'defi', position: [-4, 2, 0] as [number, number, number] },
-    { category: 'smart-contracts', position: [0, 0, 2] as [number, number, number] },
-    { category: 'dapp', position: [4, 2, 0] as [number, number, number] },
-    { category: 'nft', position: [-2, -2, -1] as [number, number, number] },
-    { category: 'research', position: [2, -2, -1] as [number, number, number] }
+    { category: 'blockchain', position: [-6, 2, 0] as [number, number, number] },
+    { category: 'web3', position: [0, 0, 3] as [number, number, number] },
+    { category: 'dapp', position: [6, 2, 0] as [number, number, number] },
+    { category: 'defi', position: [-3, -3, -2] as [number, number, number] },
+    { category: 'smart-contracts', position: [3, -3, -2] as [number, number, number] }
   ], []);
 
   const Scene = useCallback(() => (
     <>
-      {/* Ambient lighting */}
-      <ambientLight intensity={0.4} />
+      {/* Lighting setup for better visibility */}
+      <ambientLight intensity={0.6} />
       
-      {/* Main directional light */}
       <directionalLight
         position={[10, 10, 5]}
-        intensity={1}
-        color="#00FFFF"
+        intensity={1.2}
+        color="#ffffff"
         castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
       />
       
-      {/* Additional accent lights */}
-      <pointLight position={[-10, -10, -5]} intensity={0.5} color="#007FFF" />
-      <pointLight position={[10, -10, -5]} intensity={0.5} color="#00FFFF" />
+      <pointLight position={[-10, -10, -5]} intensity={0.8} color="#94a3b8" />
+      <pointLight position={[10, -10, -5]} intensity={0.8} color="#94a3b8" />
 
       {/* Render blocks */}
-      {blockPositions.map(({ category, position }) => (
-        <Block3D
-          key={category}
-          position={position}
-          category={category}
-          data={projectCategories[category as keyof typeof projectCategories]}
-          isActive={activeBlock === category}
-          onClick={() => onBlockClick(category)}
-        />
-      ))}
+      {blockPositions.map(({ category, position }) => {
+        const categoryData = projectCategories[category as keyof typeof projectCategories];
+        if (!categoryData) return null;
+        
+        return (
+          <Block3D
+            key={category}
+            position={position}
+            category={category}
+            data={categoryData}
+            isActive={activeBlock === category}
+            onClick={() => onBlockClick(category)}
+          />
+        );
+      })}
 
       {/* Connection lines between blocks */}
       {blockPositions.map((block, index) => (
@@ -68,7 +73,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
       )).flat()}
 
       {/* Particle system */}
-      <ParticleSystem count={100} />
+      <ParticleSystem count={80} />
 
       {/* Background grid */}
       <BackgroundGrid />
@@ -76,21 +81,13 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
   ), [blockPositions, activeBlock, onBlockClick]);
 
   return (
-    <motion.div 
-      className="relative w-full h-screen"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      {/* Background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-dark-950 to-dark-900 opacity-50 z-10 pointer-events-none" />
-      
+    <div className="relative w-full h-full">
       {/* 3D Canvas */}
       <Canvas
         ref={canvasRef}
         camera={{ 
-          position: [0, 0, 10], 
-          fov: 60,
+          position: [0, 0, 15], 
+          fov: 50,
           near: 0.1,
           far: 1000
         }}
@@ -100,6 +97,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
           powerPreference: "high-performance"
         }}
         className="w-full h-full"
+        style={{ background: 'transparent' }}
       >
         <Suspense fallback={null}>
           <Scene />
@@ -107,31 +105,19 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
         
         {/* Camera controls */}
         <OrbitControls
-          enablePan={false}
+          enablePan={true}
           enableZoom={true}
-          maxDistance={20}
-          minDistance={5}
-          maxPolarAngle={Math.PI / 1.5}
+          maxDistance={25}
+          minDistance={8}
+          maxPolarAngle={Math.PI / 1.3}
           minPolarAngle={Math.PI / 6}
           autoRotate={true}
-          autoRotateSpeed={0.5}
+          autoRotateSpeed={0.3}
+          enableDamping={true}
+          dampingFactor={0.05}
         />
       </Canvas>
-
-      {/* Overlay UI */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <motion.div 
-          className="glass-card px-6 py-3"
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <p className="text-gray-300 text-sm text-center">
-            Click and drag to explore • Click blocks to view projects
-          </p>
-        </motion.div>
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -153,8 +139,8 @@ const Line3D: React.FC<{ start: [number, number, number]; end: [number, number, 
   return (
     <line geometry={geometry}>
       <lineBasicMaterial 
-        color="#00FFFF" 
-        opacity={0.3} 
+        color="#64748b" 
+        opacity={0.2} 
         transparent 
       />
     </line>
@@ -165,8 +151,8 @@ const Line3D: React.FC<{ start: [number, number, number]; end: [number, number, 
 const BackgroundGrid: React.FC = () => {
   return (
     <gridHelper 
-      args={[50, 50, '#00FFFF', '#007FFF']} 
-      position={[0, -8, 0]}
+      args={[40, 40, '#475569', '#334155']} 
+      position={[0, -10, 0]}
     />
   );
 };

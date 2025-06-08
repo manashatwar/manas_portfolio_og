@@ -32,7 +32,7 @@ const Header: React.FC = () => {
     <motion.header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-dark-950/90 backdrop-blur-md border-b border-primary-500/20' 
+          ? 'bg-slate-950/90 backdrop-blur-xl border-b border-slate-800' 
           : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
@@ -44,16 +44,15 @@ const Header: React.FC = () => {
           {/* Logo */}
           <motion.div 
             className="flex items-center"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                <span className="text-dark-950 font-bold text-lg">MH</span>
+              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+                <span className="text-slate-900 font-bold text-lg">MH</span>
               </div>
-              <div className="absolute -inset-1 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg blur opacity-30 animate-pulse"></div>
             </div>
-            <span className="ml-3 text-xl font-bold text-gradient">Manas Hatwar</span>
+            <span className="ml-3 text-xl font-bold text-white">Manas Hatwar</span>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -62,7 +61,7 @@ const Header: React.FC = () => {
               <motion.a
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-primary-400 transition-colors duration-200 font-medium"
+                className="text-slate-300 hover:text-white transition-colors duration-200 font-medium"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, y: -20 }}
@@ -84,8 +83,8 @@ const Header: React.FC = () => {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  className="text-slate-400 hover:text-white transition-colors duration-200"
+                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -99,7 +98,7 @@ const Header: React.FC = () => {
 
             {/* Mobile Menu Button */}
             <motion.button
-              className="lg:hidden text-gray-300 hover:text-primary-400 transition-colors duration-200"
+              className="lg:hidden text-slate-300 hover:text-white transition-colors duration-200"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -114,7 +113,7 @@ const Header: React.FC = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              className="lg:hidden border-t border-primary-500/20 bg-dark-950/95 backdrop-blur-md"
+              className="lg:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-xl"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -125,7 +124,7 @@ const Header: React.FC = () => {
                   <motion.a
                     key={item.name}
                     href={item.href}
-                    className="block text-gray-300 hover:text-primary-400 transition-colors duration-200 font-medium"
+                    className="block text-slate-300 hover:text-white transition-colors duration-200 font-medium"
                     onClick={() => setIsMenuOpen(false)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -136,14 +135,14 @@ const Header: React.FC = () => {
                 ))}
                 
                 {/* Mobile Social Links */}
-                <div className="flex items-center space-x-4 pt-4 border-t border-primary-500/20">
+                <div className="flex items-center space-x-4 pt-4 border-t border-slate-800">
                   {socialLinks.map(({ Icon, href, label }, index) => (
                     <motion.a
                       key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                      className="text-slate-400 hover:text-white transition-colors duration-200"
                       initial={{ opacity: 0, scale: 0 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}

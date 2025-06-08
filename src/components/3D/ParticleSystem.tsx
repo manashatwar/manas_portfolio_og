@@ -16,14 +16,14 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({ count }) => {
     const sizes = new Float32Array(count);
 
     const colorPalette = [
-      new THREE.Color('#00FFFF'), // Cyan
-      new THREE.Color('#007FFF'), // Electric blue
-      new THREE.Color('#0099FF'), // Light blue
+      new THREE.Color('#94a3b8'), // Slate-400
+      new THREE.Color('#64748b'), // Slate-500
+      new THREE.Color('#475569'), // Slate-600
     ];
 
     for (let i = 0; i < count; i++) {
       // Random positions in a sphere
-      const radius = Math.random() * 25;
+      const radius = Math.random() * 20;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI;
 
@@ -38,7 +38,7 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({ count }) => {
       colors[i * 3 + 2] = color.b;
 
       // Random sizes
-      sizes[i] = Math.random() * 2 + 1;
+      sizes[i] = Math.random() * 1.5 + 0.5;
     }
 
     return { positions, colors, sizes };
@@ -55,12 +55,12 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({ count }) => {
       const i3 = i * 3;
       
       // Gentle floating motion
-      positions[i3 + 1] += Math.sin(time * 0.5 + positions[i3]) * 0.002;
+      positions[i3 + 1] += Math.sin(time * 0.3 + positions[i3]) * 0.001;
       
       // Subtle rotation around center
       const x = positions[i3];
       const z = positions[i3 + 2];
-      const angle = Math.atan2(z, x) + 0.001;
+      const angle = Math.atan2(z, x) + 0.0005;
       const radius = Math.sqrt(x * x + z * z);
       
       positions[i3] = radius * Math.cos(angle);
@@ -95,8 +95,8 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({ count }) => {
       <pointsMaterial
         vertexColors
         transparent
-        opacity={0.6}
-        size={0.1}
+        opacity={0.4}
+        size={0.08}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
