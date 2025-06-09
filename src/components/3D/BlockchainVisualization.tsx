@@ -21,6 +21,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [webGLSupported, setWebGLSupported] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   // Detect mobile and WebGL support
   useEffect(() => {
@@ -34,6 +35,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         setWebGLSupported(!!gl);
       } catch (e) {
+        console.warn('WebGL not supported, falling back to 2D visualization');
         setWebGLSupported(false);
       }
     };
@@ -50,6 +52,13 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
       window.removeEventListener('resize', checkMobile);
       clearTimeout(timer);
     };
+  }, []);
+
+  // Error boundary for 3D canvas
+  const handleCanvasError = useCallback((error: any) => {
+    console.warn('3D Canvas error, falling back to 2D visualization:', error);
+    setHasError(true);
+    setWebGLSupported(false);
   }, []);
 
   // Responsive block positions
@@ -77,63 +86,70 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
     }
   }, [isMobile]);
 
-  const Scene = useCallback(() => (
-    <>
-      {/* Responsive lighting setup */}
-      <ambientLight intensity={isMobile ? 0.4 : 0.6} />
-      
-      <directionalLight
-        position={[10, 10, 5]}
-        intensity={isMobile ? 0.8 : 1.2}
-        color="#ffffff"
-        castShadow={!isMobile} // Disable shadows on mobile for performance
-        shadow-mapSize-width={isMobile ? 1024 : 2048}
-        shadow-mapSize-height={isMobile ? 1024 : 2048}
-      />
-      
-      <pointLight position={[-10, -10, -5]} intensity={0.6} color="#00ffff" />
-      <pointLight position={[10, -10, -5]} intensity={0.6} color="#007fff" />
-
-      {/* Render blocks */}
-      {blockPositions.map(({ category, position }) => {
-        const categoryData = projectCategories[category as keyof typeof projectCategories];
-        if (!categoryData) return null;
-        
-        return (
-          <Block3D
-            key={category}
-            position={position}
-            category={category}
-            data={categoryData}
-            isActive={activeBlock === category}
-            onClick={() => onBlockClick(category)}
-            isMobile={isMobile}
+  const Scene = useCallback(() => {
+    try {
+      return (
+        <>
+          {/* Responsive lighting setup */}
+          <ambientLight intensity={isMobile ? 0.4 : 0.6} />
+          
+          <directionalLight
+            position={[10, 10, 5]}
+            intensity={isMobile ? 0.8 : 1.2}
+            color="#ffffff"
+            castShadow={!isMobile} // Disable shadows on mobile for performance
+            shadow-mapSize-width={isMobile ? 1024 : 2048}
+            shadow-mapSize-height={isMobile ? 1024 : 2048}
           />
-        );
-      })}
+          
+          <pointLight position={[-10, -10, -5]} intensity={0.6} color="#00ffff" />
+          <pointLight position={[10, -10, -5]} intensity={0.6} color="#007fff" />
 
-      {/* Connection lines between blocks */}
-      {blockPositions.map((block, index) => (
-        blockPositions.slice(index + 1).map((nextBlock, nextIndex) => (
-          <Line3D
-            key={`${block.category}-${nextBlock.category}`}
-            start={block.position}
-            end={nextBlock.position}
-            isMobile={isMobile}
-          />
-        ))
-      )).flat()}
+          {/* Render blocks */}
+          {blockPositions.map(({ category, position }) => {
+            const categoryData = projectCategories[category as keyof typeof projectCategories];
+            if (!categoryData) return null;
+            
+            return (
+              <Block3D
+                key={category}
+                position={position}
+                category={category}
+                data={categoryData}
+                isActive={activeBlock === category}
+                onClick={() => onBlockClick(category)}
+                isMobile={isMobile}
+              />
+            );
+          })}
 
-      {/* Particle system with mobile optimization */}
-      <ParticleSystem count={isMobile ? 40 : 80} />
+          {/* Connection lines between blocks */}
+          {blockPositions.map((block, index) => (
+            blockPositions.slice(index + 1).map((nextBlock, nextIndex) => (
+              <Line3D
+                key={`${block.category}-${nextBlock.category}`}
+                start={block.position}
+                end={nextBlock.position}
+                isMobile={isMobile}
+              />
+            ))
+          )).flat()}
 
-      {/* Background grid */}
-      <BackgroundGrid isMobile={isMobile} />
-    </>
-  ), [blockPositions, activeBlock, onBlockClick, isMobile]);
+          {/* Particle system with mobile optimization */}
+          <ParticleSystem count={isMobile ? 40 : 80} />
 
-  // Fallback for devices without WebGL support
-  if (!webGLSupported) {
+          {/* Background grid */}
+          <BackgroundGrid isMobile={isMobile} />
+        </>
+      );
+    } catch (error) {
+      console.warn('Scene rendering error:', error);
+      return null;
+    }
+  }, [blockPositions, activeBlock, onBlockClick, isMobile]);
+
+  // Fallback for devices without WebGL support or errors
+  if (!webGLSupported || hasError) {
     return (
       <FallbackVisualization 
         onBlockClick={onBlockClick}
@@ -160,7 +176,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
         </motion.div>
       )}
 
-      {/* 3D Canvas */}
+      {/* 3D Canvas with error handling */}
       <Canvas
         ref={canvasRef}
         camera={{ 
@@ -178,6 +194,11 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
         className="w-full h-full"
         style={{ background: 'transparent' }}
         performance={{ min: isMobile ? 0.3 : 0.5 }} // Lower performance threshold for mobile
+        onError={handleCanvasError}
+        onCreated={(state) => {
+          // Ensure canvas is properly initialized
+          state.gl.setClearColor(0x000000, 0);
+        }}
       >
         <Suspense fallback={null}>
           <Scene />
@@ -200,7 +221,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
       </Canvas>
 
       {/* Mobile-optimized UI overlays */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none z-10">
         {/* Block labels with responsive positioning */}
         {blockPositions.map(({ category, position }) => {
           const categoryData = projectCategories[category as keyof typeof projectCategories];
@@ -241,7 +262,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.5 }}
-        className={`absolute ${isMobile ? 'bottom-2 left-2' : 'bottom-4 left-4'} glass-card ${isMobile ? 'px-2 py-1' : 'px-3 py-2'}`}
+        className={`absolute ${isMobile ? 'bottom-2 left-2' : 'bottom-4 left-4'} glass-card ${isMobile ? 'px-2 py-1' : 'px-3 py-2'} z-20`}
       >
         <div className={`${isMobile ? 'text-xs' : 'text-sm'} text-slate-300 font-mono space-y-1`}>
           <div className="text-slate-400">Network Status</div>
@@ -260,7 +281,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 2 }}
-        className={`absolute ${isMobile ? 'bottom-2 right-2' : 'bottom-4 right-4'} glass-card ${isMobile ? 'px-2 py-1' : 'px-3 py-2'}`}
+        className={`absolute ${isMobile ? 'bottom-2 right-2' : 'bottom-4 right-4'} glass-card ${isMobile ? 'px-2 py-1' : 'px-3 py-2'} z-20`}
       >
         <p className={`text-slate-300 ${isMobile ? 'text-xs' : 'text-sm'}`}>
           <span className="text-slate-100 font-medium">
@@ -276,7 +297,7 @@ const BlockchainVisualization: React.FC<BlockchainVisualizationProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 3 }}
-          className="absolute top-2 right-2 glass-card px-2 py-1"
+          className="absolute top-2 right-2 glass-card px-2 py-1 z-20"
         >
           <div className="flex items-center space-x-1">
             <div className="w-1 h-1 bg-green-400 rounded-full"></div>
